@@ -4,15 +4,16 @@ import vscode from "vscode"
 import { getSvgDataUri } from "../utils/create-svg-uri"
 
 // 快捷键字母组合，如aa、ab、ac到zx、zy、zz
-export const twoLetterSequence = _.chain(range(97, 114))
+export const twoLetterSequence = _.chain(range(97, 123))
   .map((i) => {
-    const codes = range(97, 114).map((j) => {
+    const codes = range(97, 123).map((j) => {
       return `${String.fromCharCode(i)}${String.fromCharCode(j)}`
     })
     return codes
   })
   .flatten()
   .value()
+console.log("twoLetterSequence", twoLetterSequence)
 
 const editorConfig = vscode.workspace.getConfiguration("editor")
 const fontFamily = editorConfig.get<string>("fontFamily")!

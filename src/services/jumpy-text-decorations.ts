@@ -49,6 +49,8 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     .flatten()
     .value()
 
+  console.log("length", 26 * 26, twoLetterSequence.length, splitWords.length)
+
   const decorations = _.chain(Array.from({ length: Math.min(twoLetterSequence.length, splitWords.length) }))
     .map<vscode.DecorationOptions & { index: number; code: string }>((_undefined, index) => {
       const code = twoLetterSequence[index]
