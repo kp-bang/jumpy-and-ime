@@ -17,16 +17,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "jumpy-and-ime.test",
-        "title": "test"
-      },
-      {
         "command": "jumpy-and-ime.jumpy-word",
         "title": "Jumpy Word Mode"
       },
       {
         "command": "jumpy-and-ime.jumpy-exit",
         "title": "Exit Jumpy Mode"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-up-5lines",
+        "title": "viewport向上移动5行"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-down-5lines",
+        "title": "viewport向下移动5行"
       }
     ]
   },
@@ -60,5 +64,8 @@
     "rxjs": "^7.8.2",
     "vscode-oniguruma": "^1.6.2",
     "vscode-textmate": "^6.0.0"
-  }
+  },
+  "extensionDependencies": [
+    "bang.hscopes-booster"
+  ]
 }

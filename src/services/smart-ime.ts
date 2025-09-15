@@ -104,13 +104,13 @@ const smartImeService = (context: vscode.ExtensionContext) => {
       englishAndDoubleSpaceSwitch(document, position)
     }
 
-    // const token = (
-    //   hscopes?.exports as {
-    //     getScopeAt(document: vscode.TextDocument, position: vscode.Position): any | null
-    //   }
-    // ).getScopeAt(document, position)
+    const token = (
+      hscopes?.exports as {
+        getScopeAt(document: vscode.TextDocument, position: vscode.Position): any | null
+      }
+    ).getScopeAt(document, position)
     const start = Date.now()
-    const token = getScopeAt(document, position)
+    // const token = getScopeAt(document, position) // 本项目的很卡，待调试
     console.log("%c [ token ]-103", "font-size:13px; background:pink; color:#bf2c9f;", Date.now() - start, token)
     if (!token) {
       return

@@ -1,3 +1,4 @@
+import { omit } from "lodash"
 import vscode from "vscode"
 
 import { IMEnum } from "../constants/im"
@@ -34,14 +35,24 @@ export const setCursor = (currentIM: IMEnum) => {
   if (IM.ccEnable) {
     let globalColorCustomizations = vscode.workspace.getConfiguration("workbench").inspect("colorCustomizations")
       ?.globalValue as any
-    if (!globalColorCustomizations || globalColorCustomizations["editorCursor.foreground"] !== cc) {
-      vscode.workspace
-        .getConfiguration("workbench")
-        .update(
-          "colorCustomizations",
-          { ...globalColorCustomizations, "editorCursor.foreground": cc, "terminalCursor.foreground": cc },
-          vscode.ConfigurationTarget.Workspace
-        )
+
+    let newGlobalColorCustomizations = { ...globalColorCustomizations }
+    if (cc && (!globalColorCustomizations || globalColorCustomizations["editorCursor.foreground"] !== cc)) {
+      newGlobalColorCustomizations = {
+        ...newGlobalColorCustomizations,
+        "editorCursor.foreground": cc,
+        "terminalCursor.foreground": cc
+      }
+    } else {
+      newGlobalColorCustomizations = omit(newGlobalColorCustomizations, [
+        "editorCursor.foreground",
+        "terminalCursor.foreground"
+      ])
     }
+    console.log("newGlobalColorCustomizations", newGlobalColorCustomizations)
+
+    vscode.workspace
+      .getConfiguration("workbench")
+      .update("colorCustomizations", newGlobalColorCustomizations, vscode.ConfigurationTarget.Global)
   }
 }

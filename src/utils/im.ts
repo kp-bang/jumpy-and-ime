@@ -1,6 +1,7 @@
 import { close, DataType, define, open } from "ffi-rs"
 
 import { IMEnum } from "../constants/im"
+import { setCursor } from "./cursor"
 
 const dll = define({
   MessageBoxW: {
@@ -27,7 +28,6 @@ const dll = define({
 })
 
 export const switchIM = (type: IMEnum) => {
-  console.log("switchIM调用", type)
   open({
     library: "user32",
     path: "user32"
@@ -45,6 +45,8 @@ export const switchIM = (type: IMEnum) => {
 
   close("user32")
   close("imm32")
+
+  setCursor(type)
 }
 
 const dll2 = define({

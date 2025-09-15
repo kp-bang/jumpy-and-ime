@@ -4,12 +4,6 @@ import { jumpyJumpyExit$ } from "../event-source/jumpy"
 import globalStore from "../store/global"
 
 const jumpyWatchTypeService = (context: vscode.ExtensionContext) => {
-  // const enIm = imeApi.getEnglishIM()
-  // originalIM = imeApi.obtainIM()
-  // if (enIm !== originalIM) {
-  //   imeApi.switchToEnglishIM()
-  // }
-
   /**
    * 在jumpy模式下监听输入
    * 因为vscode会卡拼音输入法

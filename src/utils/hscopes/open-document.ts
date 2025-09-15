@@ -14,7 +14,6 @@ const openDocument = async (document: vscode.TextDocument) => {
       thisDocController.refresh()
     } else if (registry) {
       const scopeName = getLanguageScopeName(document.languageId)
-      console.log("%c [ scopeName ]-17", "font-size:13px; background:pink; color:#bf2c9f;", scopeName)
       if (scopeName) {
         const grammar = await registry.loadGrammar(scopeName)
         globalStore.hscopes.documentsMap.set(document.uri, new DocumentController(document, grammar))

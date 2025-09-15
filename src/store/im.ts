@@ -7,7 +7,7 @@ class IMStore {
   @observable
   accessor csEnable = true
   @observable
-  accessor ccEnable = false
+  accessor ccEnable = true
 
   @observable
   accessor csEnglish: CS = "Line"

@@ -5,8 +5,6 @@ import { jumpyJumpCodeComplete$, jumpyJumpyExit$ } from "../event-source/jumpy"
 const jumpyJumpService = (context: vscode.ExtensionContext) => {
   // 监听跳转目标
   const jumpyJumpCodeCompleteSubscript = jumpyJumpCodeComplete$.subscribe((decoration) => {
-    // const position = positions[getCodeIndex(code.toLowerCase())]
-
     if (!decoration) {
       vscode.window.showInformationMessage("找不到目标，光标跳转失败")
       return
