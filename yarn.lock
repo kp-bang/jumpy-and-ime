@@ -409,6 +409,61 @@
     ora "^8.1.0"
     semver "^7.6.2"
 
+"@yuuang/ffi-rs-android-arm64@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-android-arm64/-/ffi-rs-android-arm64-1.3.0.tgz#556d060e21dc0996f371049a0576203c5de2930a"
+  integrity sha512-1kO6gmoDwZVlEzqbWXkQke8WLGAECOAAjTNBjphPN1sn+ICdUGBfR7TKHMbygspGXpFUFFI7/H75l3Gt8QsaLQ==
+
+"@yuuang/ffi-rs-darwin-arm64@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-darwin-arm64/-/ffi-rs-darwin-arm64-1.3.0.tgz#24bfa455adb4e6b17427ee2bee6a45f54d131703"
+  integrity sha512-JJOG1MXNV04FN0SWNUSK1i3LJVn76XF15+OcRYl0bWgjYnfsBzXzeIQdAp3wIlDTPPQQ+Z3Fxbb+b7wuf7uIDA==
+
+"@yuuang/ffi-rs-darwin-x64@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-darwin-x64/-/ffi-rs-darwin-x64-1.3.0.tgz#7dd06ad486495350e44d80927877715d85ccd14f"
+  integrity sha512-YAagzuM6LNqbcFhXMfUFmTT0F+RD6qV59Qe7L20mb5Xf9luipieqs2fEUVU+MAkgXk1gXRj7HczWkI97+qa3Mg==
+
+"@yuuang/ffi-rs-linux-arm-gnueabihf@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-linux-arm-gnueabihf/-/ffi-rs-linux-arm-gnueabihf-1.3.0.tgz#ef68468ce29a6bad4e76fae4178ab7c9729cf7db"
+  integrity sha512-RZOU9PcYpaE920dDoDSEL+UQ19CU9MEf9Gm3kKSpb161TPeKzqMZPUEMpbRaww18pPBN1aWbe2BHiyKAO6tTcg==
+
+"@yuuang/ffi-rs-linux-arm64-gnu@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-linux-arm64-gnu/-/ffi-rs-linux-arm64-gnu-1.3.0.tgz#096cce0830453a723b0d5e09135d6dc21ec380f8"
+  integrity sha512-US8XxQUja+dK4WTZWy9RD2/N/c4bLpFoH7sNYO+ENEpmfMbrB7Nw2bKvCk/I0OptuV4P3pScRgDD5xk4ztXgEA==
+
+"@yuuang/ffi-rs-linux-arm64-musl@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-linux-arm64-musl/-/ffi-rs-linux-arm64-musl-1.3.0.tgz#52743b554f930309d878401affcedb48bc21a022"
+  integrity sha512-DQ++kgJ6hks90wnDoY3PSkoxX2DmNI4e/H/gKFLKoOm+3K++se/ZyONwlVvDmOWKt2yTt6SyrxoIO7atr5LQmQ==
+
+"@yuuang/ffi-rs-linux-x64-gnu@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-linux-x64-gnu/-/ffi-rs-linux-x64-gnu-1.3.0.tgz#e5910c01b4f65e6ff8847bf90e3b1be2d532d518"
+  integrity sha512-HTk+RUDozycipfL97TsmVhZpJKK3ciTY4gIC6Wlg9dFpwcCscUVH5B6DKctbV/KmCV7r3FMB2eJxQBuLRH1JFg==
+
+"@yuuang/ffi-rs-linux-x64-musl@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-linux-x64-musl/-/ffi-rs-linux-x64-musl-1.3.0.tgz#b56551d6be46e25fb263553330c3289108760913"
+  integrity sha512-qpcPQW2AIeuS/CCBZhKEI07JxfoVulFQUHjsx6rhoAC5SVb2V+wcf8X5CkIvwhiRzydelw/uRml5vY0z+ieh1w==
+
+"@yuuang/ffi-rs-win32-arm64-msvc@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-win32-arm64-msvc/-/ffi-rs-win32-arm64-msvc-1.3.0.tgz#a68c84c98481191a9f2ebab73778ce4042d2f41b"
+  integrity sha512-Dflhd43LH4Y4pcWp3opozPp0b+8xAvxWq8ZyIWf/HhTMYIvWWjBoGo3LvLgzx8R2CdELKMO17dni76qCgJfv1A==
+
+"@yuuang/ffi-rs-win32-ia32-msvc@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-win32-ia32-msvc/-/ffi-rs-win32-ia32-msvc-1.3.0.tgz#9ebff3da071eca70eac039da30e1504c06b26d6a"
+  integrity sha512-auc7WR0fKArxxt2m9HaHWrgJMlkwVg94+AN5TGGwT0RIAJTfc7juExXHwpRcWifDTykooXyGvJdTY351L1BVww==
+
+"@yuuang/ffi-rs-win32-x64-msvc@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@yuuang/ffi-rs-win32-x64-msvc/-/ffi-rs-win32-x64-msvc-1.3.0.tgz#4853980c6e3d8a78bcbc1831d25f6a137f3bd4b1"
+  integrity sha512-GL9q9cyuZXkNomr3DmkwSaTKpRInY8y4efcCLvv8J4oiIRkrUzKUQ9//l26uqGmPGYGtSJ5rjLBX9uDmkhhZjQ==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmmirror.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
@@ -814,6 +869,23 @@ fastq@^1.6.0:
   integrity sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==
   dependencies:
     reusify "^1.0.4"
+
+ffi-rs@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/ffi-rs/-/ffi-rs-1.3.0.tgz#7d1ce68877d68210953f2a1ff6abaa1d67c43905"
+  integrity sha512-xdyaooHKShKvNZE9X7PDn4KdNtZaX8cPPJkIqwsx2b7u4UFk6m1VdzsmCSc6eQDFCbk7LyygU1VDl9VRbmPXEg==
+  optionalDependencies:
+    "@yuuang/ffi-rs-android-arm64" "1.3.0"
+    "@yuuang/ffi-rs-darwin-arm64" "1.3.0"
+    "@yuuang/ffi-rs-darwin-x64" "1.3.0"
+    "@yuuang/ffi-rs-linux-arm-gnueabihf" "1.3.0"
+    "@yuuang/ffi-rs-linux-arm64-gnu" "1.3.0"
+    "@yuuang/ffi-rs-linux-arm64-musl" "1.3.0"
+    "@yuuang/ffi-rs-linux-x64-gnu" "1.3.0"
+    "@yuuang/ffi-rs-linux-x64-musl" "1.3.0"
+    "@yuuang/ffi-rs-win32-arm64-msvc" "1.3.0"
+    "@yuuang/ffi-rs-win32-ia32-msvc" "1.3.0"
+    "@yuuang/ffi-rs-win32-x64-msvc" "1.3.0"
 
 file-entry-cache@^8.0.0:
   version "8.0.0"

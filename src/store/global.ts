@@ -1,12 +1,14 @@
 import { action, observable, reaction } from "mobx"
 import JumpyStore from "./jumpy"
 import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../event-source/jumpy"
+import IMStore from "./im"
 
 class GlobalStore {
   @observable
   accessor isJumpyMode = false
 
   jumpy = new JumpyStore()
+  im = new IMStore()
 
   @action
   reset() {
