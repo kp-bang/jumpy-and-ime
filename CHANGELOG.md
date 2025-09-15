@@ -1,10 +1,9 @@
-# My VSCode Extension
+# Change Log
 
-A simple extension that helps you manage Git branches more easily.
+All notable changes to the "jumpy-and-ime" extension will be documented in this file.
 
-## Features
-- Switch between branches quickly
-- Create and delete branches
+Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## Usage
-Open the command palette (`Ctrl+Shift+P`) and search for "Git Branch Manager".
+## [Unreleased]
+
+- Initial release
