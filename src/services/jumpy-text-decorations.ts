@@ -49,8 +49,6 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     .flatten()
     .value()
 
-  console.log("length", 26 * 26, twoLetterSequence.length, splitWords.length)
-
   const decorations = _.chain(Array.from({ length: Math.min(twoLetterSequence.length, splitWords.length) }))
     .map<vscode.DecorationOptions & { index: number; code: string }>((_undefined, index) => {
       const code = twoLetterSequence[index]
@@ -80,15 +78,41 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
       }
     })
     .value()
-  console.log("%c [ decorations ]-81", "font-size:13px; background:pink; color:#bf2c9f;", decorations)
 
-  const [evenDecorations, oddDecorations] = _.partition(decorations, (d) => d.index % 2 === 0)
+  // 判断相邻的decoration是否有交叉
+  const judgeIntersection = (left: vscode.DecorationOptions, right: vscode.DecorationOptions) => {
+    const leftStart = left.range.start
+    const rightStart = right.range.start
+    if (leftStart.line !== rightStart.line) return false
+    if (rightStart.character - leftStart.character <= 2) return true
+    return false
+  }
+
+  // 筛选出有交叉部分的dec，只把有重叠部分的dec闪烁显示
+  const [fixedDecorations, mixedDecorations] = _.partition(decorations, (d) => {
+    const preD = decorations[d.index - 1]
+    const nextD = decorations[d.index + 1]
+
+    if (d.index === 0) {
+      return !judgeIntersection(d, nextD)
+    }
+
+    if (d.index === decorations.length - 1) {
+      return !judgeIntersection(preD, d)
+    }
+
+    return !judgeIntersection(preD, d) && !judgeIntersection(d, nextD)
+  })
 
   // 防重叠闪烁
   const rerender$ = timer(0, 1000).pipe(
     map((count) => {
-      if (count % 2 === 0) return evenDecorations
-      return oddDecorations
+      return [
+        ...fixedDecorations,
+        ...mixedDecorations.filter((_, index) => {
+          return count % 2 === index % 2
+        })
+      ]
     })
   )
   const rerenderSubscript = rerender$.subscribe((decorations) => {
