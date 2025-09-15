@@ -2,6 +2,8 @@ import { action, observable, reaction } from "mobx"
 import JumpyStore from "./jumpy"
 import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../event-source/jumpy"
 import IMStore from "./im"
+import SmartImeStore from "./smart-ime"
+import HscopesStore from "./hscopes"
 
 class GlobalStore {
   @observable
@@ -9,6 +11,8 @@ class GlobalStore {
 
   jumpy = new JumpyStore()
   im = new IMStore()
+  smartIme = new SmartImeStore()
+  hscopes = new HscopesStore()
 
   @action
   reset() {
