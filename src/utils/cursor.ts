@@ -25,11 +25,11 @@ export const setCursor = (currentIM: IMEnum) => {
       )
       return
   }
+
   if (IM.csEnable && vscode.window.activeTextEditor) {
     let ATEOptions = vscode.window.activeTextEditor.options
-    if (ATEOptions.cursorStyle !== vscode.TextEditorCursorStyle[cs]) {
-      vscode.window.activeTextEditor.options = { ...ATEOptions, cursorStyle: vscode.TextEditorCursorStyle[cs] }
-    }
+    console.log("cursorStyle", cs)
+    vscode.window.activeTextEditor.options = { ...ATEOptions, cursorStyle: vscode.TextEditorCursorStyle[cs] }
   }
 
   if (IM.ccEnable) {
@@ -37,19 +37,20 @@ export const setCursor = (currentIM: IMEnum) => {
       ?.globalValue as any
 
     let newGlobalColorCustomizations = { ...globalColorCustomizations }
-    if (cc && (!globalColorCustomizations || globalColorCustomizations["editorCursor.foreground"] !== cc)) {
+    if (cc) {
+      console.log("cursorColor", cc)
       newGlobalColorCustomizations = {
         ...newGlobalColorCustomizations,
         "editorCursor.foreground": cc,
         "terminalCursor.foreground": cc
       }
     } else {
+      console.log("cursorColor", undefined)
       newGlobalColorCustomizations = omit(newGlobalColorCustomizations, [
         "editorCursor.foreground",
         "terminalCursor.foreground"
       ])
     }
-    console.log("newGlobalColorCustomizations", newGlobalColorCustomizations)
 
     vscode.workspace
       .getConfiguration("workbench")

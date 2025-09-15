@@ -12,36 +12,36 @@ const imService = (context: vscode.ExtensionContext) => {
   const currentIM = obtainIM()
   setCursor(currentIM)
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeWindowState((e: vscode.WindowState) => {
-      if (!e.focused) return
+  // context.subscriptions.push(
+  //   vscode.window.onDidChangeWindowState((e: vscode.WindowState) => {
+  //     if (!e.focused) return
 
-      const im = obtainIM()
-      console.log("windowStateChange im", im)
-      setCursor(im)
-    })
-  )
+  //     const im = obtainIM()
+  //     console.log("windowStateChange im", im)
+  //     setCursor(im)
+  //   })
+  // )
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor(async (e: vscode.TextEditor | undefined) => {
-      if (!e) return
+  // context.subscriptions.push(
+  //   vscode.window.onDidChangeActiveTextEditor(async (e: vscode.TextEditor | undefined) => {
+  //     if (!e) return
 
-      const im = obtainIM()
-      console.log("activeTextEditorChange im", im)
-      setCursor(im)
-    })
-  )
+  //     const im = obtainIM()
+  //     console.log("activeTextEditorChange im", im)
+  //     setCursor(im)
+  //   })
+  // )
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeTextEditorOptions((e: vscode.TextEditorOptionsChangeEvent) => {
-      const IM = globalStore.im
-      if (IM.ccEnable && !IM.csEnable) return
+  // context.subscriptions.push(
+  //   vscode.window.onDidChangeTextEditorOptions((e: vscode.TextEditorOptionsChangeEvent) => {
+  //     const IM = globalStore.im
+  //     if (IM.ccEnable && !IM.csEnable) return
 
-      const im = obtainIM()
-      console.log("textEditorOptionsChange im", im)
-      setCursor(im)
-    })
-  )
+  //     const im = obtainIM()
+  //     console.log("textEditorOptionsChange im", im)
+  //     setCursor(im)
+  //   })
+  // )
 
   // 进入jumpy模式，就转成英文
   const jumpyJumpyEnterSubscript = jumpyJumpyEnter$.subscribe(() => {

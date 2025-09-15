@@ -24,6 +24,7 @@ async function englishAndDoubleSpaceSwitch(document: TextDocument, cursorPositio
       const deleteRange = new Range(cursorPosition.translate(0, -1), cursorPosition)
       await vscode.window.activeTextEditor?.edit((editBuilder) => {
         editBuilder.delete(deleteRange)
+        console.log("englishAndDoubleSpaceSwitch cn")
         switchIM(IMEnum.CN)
       })
     }

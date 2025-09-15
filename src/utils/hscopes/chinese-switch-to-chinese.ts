@@ -21,7 +21,7 @@ async function chineseSwitchToChinese(document: TextDocument, cursorPosition: Po
       return
     }
     lastChineseSwitchToChineseTime = Date.now()
-
+    console.log("chineseSwitchToChinese cn")
     switchIM(IMEnum.CN)
   }
 }

@@ -12,6 +12,7 @@ async function chineseAndSpaceSwitch(document: TextDocument, cursorPosition: Pos
   const range = new Range(prePosition, cursorPosition)
   const preChars = document.getText(range)
   if (chineseAndSpaceSwitchToEnglishPattern.test(preChars)) {
+    console.log("chineseAndSpaceSwitch en")
     switchIM(IMEnum.EN)
   }
 }

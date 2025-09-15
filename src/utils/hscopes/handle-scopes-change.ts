@@ -66,6 +66,7 @@ export async function handleScopesChange(curScopes: string[]) {
     isSwitch = true
     isSwitchToChinese = false
   }
+  console.log("handleScopesChange", isSwitch, isSwitchToChinese)
   if (isSwitch) {
     if (isSwitchToChinese) {
       switchIM(IMEnum.CN)
