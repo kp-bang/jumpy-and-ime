@@ -24,7 +24,6 @@ export default class JumpyStore {
     this.jumpWordCommitted = ""
     this.decorations = undefined
     this.subscriptions.forEach((cb) => cb())
-    console.log("this.subscriptions", this.subscriptions)
     this.subscriptions.length = 0
   }
 }

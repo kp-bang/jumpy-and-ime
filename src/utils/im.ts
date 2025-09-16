@@ -27,7 +27,13 @@ const dll = define({
   }
 })
 
+let currentIME: IMEnum
 export const switchIM = (type: IMEnum) => {
+  if (currentIME === type) {
+    console.log("switchIM不变")
+    return
+  }
+  currentIME = type
   open({
     library: "user32",
     path: "user32"

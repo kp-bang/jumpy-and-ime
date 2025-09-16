@@ -84,7 +84,7 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     const leftStart = left.range.start
     const rightStart = right.range.start
     if (leftStart.line !== rightStart.line) return false
-    if (rightStart.character - leftStart.character <= 2) return true
+    if (rightStart.character - leftStart.character <= 3) return true
     return false
   }
 

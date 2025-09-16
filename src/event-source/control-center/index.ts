@@ -1,11 +1,12 @@
 import vscode from "vscode"
 
-import { Context } from "../constants/common"
-import { IMEnum } from "../constants/im"
-import { decorationType } from "../constants/jumpy"
-import globalStore from "../store/global"
-import { obtainIM, switchIM } from "../utils/im"
-import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "./jumpy"
+import { Context } from "../../constants/common"
+import { IMEnum } from "../../constants/im"
+import { decorationType } from "../../constants/jumpy"
+import globalStore from "../../store/global"
+import { obtainIM, switchIM } from "../../utils/im"
+import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../jumpy"
+import hscopesControlRun from "./hscopes"
 
 const controlCenterRun = () => {
   // 进入jumpy模式
@@ -46,6 +47,8 @@ const controlCenterRun = () => {
     vscode.window.activeTextEditor?.setDecorations(decorationType, [])
     globalStore.reset()
   })
+
+  hscopesControlRun()
 }
 
 export default controlCenterRun

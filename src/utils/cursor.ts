@@ -26,7 +26,7 @@ export const setCursor = (currentIM: IMEnum) => {
       return
   }
 
-  console.log("cursorStyle", cs, "cursorColor", cc)
+  // console.log("cursorStyle", cs, "cursorColor", cc)
   if (IM.csEnable && vscode.window.activeTextEditor) {
     let ATEOptions = vscode.window.activeTextEditor.options
     vscode.window.activeTextEditor.options = { ...ATEOptions, cursorStyle: vscode.TextEditorCursorStyle[cs] }

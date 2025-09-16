@@ -1,12 +1,8 @@
 import vscode, { TextEditorCursorStyle } from "vscode"
 
 import { chineseCharacterPattern } from "../constants/hscopes"
+import { hscopesCursorMove$ } from "../event-source/hscopes"
 import globalStore from "../store/global"
-import chineseAndSpaceSwitch from "../utils/hscopes/chinese-and-space-switch"
-import chineseSwitchToChinese from "../utils/hscopes/chinese-switch-to-chinese"
-import englishAndDoubleSpaceSwitch from "../utils/hscopes/english-and-double-space-switch"
-import getScopeAt from "../utils/hscopes/get-scope-at"
-import { handleScopesChange } from "../utils/hscopes/handle-scopes-change"
 
 const smartImeService = (context: vscode.ExtensionContext) => {
   /**
@@ -84,7 +80,7 @@ const smartImeService = (context: vscode.ExtensionContext) => {
     })
   )
 
-  // 监听 vscode 光标变化事件
+  // 光标移动
   context.subscriptions.push(
     vscode.window.onDidChangeTextEditorSelection((e) => {
       if (globalStore.smartIme.smartImeDisabled) return
@@ -95,49 +91,16 @@ const smartImeService = (context: vscode.ExtensionContext) => {
       const editor = vscode.window.activeTextEditor
       if (!editor) return
 
-      const document = editor.document
-      const position = e.selections[0].active
-      // 如果前一个字符是中文, 则切换输入法
-      if (globalStore.hscopes.enableChineseSwitchToChinese) {
-        chineseSwitchToChinese(document, position)
-      }
-      // 如果前两个字符是中文加空格, 则切换输入法
-      if (globalStore.hscopes.enableChineseAndSpaceSwitchToEnglish) {
-        chineseAndSpaceSwitch(document, position)
-      }
-      // 英文加双空格, 则切换输入法
-      if (globalStore.hscopes.enableEnglishAndDoubleSpaceSwitchToChinese) {
-        englishAndDoubleSpaceSwitch(document, position)
-      }
-
-      // const token = (
-      //   hscopes?.exports as {
-      //     getScopeAt(document: vscode.TextDocument, position: vscode.Position): any | null
-      //   }
-      // ).getScopeAt(document, position)
-
-      const token = getScopeAt(document, position)
-
-      if (!token) return
-
-      handleScopesChange(token.scopes)
+      hscopesCursorMove$.next()
     })
   )
 
+  // 当 VS Code 窗口的 焦点状态 发生改变时。
   context.subscriptions.push(
     vscode.window.onDidChangeWindowState((e: vscode.WindowState) => {
       if (!e.focused) return
 
-      const editor = vscode.window.activeTextEditor
-      if (!editor) return
-
-      const document = editor?.document
-      const position = editor?.selections[0]?.active
-
-      const token = getScopeAt(document, position)
-
-      if (!token) return
-      handleScopesChange(token.scopes)
+      hscopesCursorMove$.next()
     })
   )
 }
