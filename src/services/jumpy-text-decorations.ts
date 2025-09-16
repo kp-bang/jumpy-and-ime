@@ -5,7 +5,7 @@ import vscode from "vscode"
 
 import { extendsName } from "../constants/common"
 import { darkDataUriCache, decorationType, lightDataUriCache, twoLetterSequence } from "../constants/jumpy"
-import { jumpyJumpyExit$ } from "../event-source/jumpy"
+import globalStore from "../store/global"
 import { getVisibleLines } from "../utils/lines"
 
 interface JumpyPosition {
@@ -119,12 +119,7 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     editor?.setDecorations(decorationType, decorations)
   })
 
-  // 退出清空
-  const jumpyJumpyExitSubscript = jumpyJumpyExit$.subscribe(() => {
-    editor?.setDecorations(decorationType, [])
-    rerenderSubscript.unsubscribe()
-    jumpyJumpyExitSubscript.unsubscribe()
-  })
+  globalStore.jumpy.subscriptions.push(() => rerenderSubscript.unsubscribe())
 
   return decorations
 }

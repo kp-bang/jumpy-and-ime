@@ -19,11 +19,7 @@ const jumpyWatchTypeService = (context: vscode.ExtensionContext) => {
     globalStore.jumpy.input(text)
   })
 
-  // 退出清空
-  const jumpyJumpyExitSubscript = jumpyJumpyExit$.subscribe(() => {
-    jumpyTypeDisposable.dispose()
-    jumpyJumpyExitSubscript.unsubscribe()
-  })
+  globalStore.jumpy.subscriptions.push(() => jumpyTypeDisposable.dispose())
 }
 
 export default jumpyWatchTypeService

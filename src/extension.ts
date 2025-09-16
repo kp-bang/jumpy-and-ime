@@ -1,6 +1,7 @@
 import * as vscode from "vscode"
 
 import commands from "./commands"
+import controlCenterRun from "./event-source/control-center"
 import hcopesBoosterService from "./services/hscopes-booster-service"
 import imService from "./services/im-service"
 import smartImeService from "./services/smart-ime"
@@ -21,6 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
   hcopesBoosterService(context)
 
   commands.forEach((command) => command(context))
+
+  controlCenterRun()
 }
 
 export function deactivate() {

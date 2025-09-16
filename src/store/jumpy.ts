@@ -1,6 +1,5 @@
 import vscode from "vscode"
 import { action, observable } from "mobx"
-import { IMEnum } from "../constants/im"
 
 export default class JumpyStore {
   @observable
@@ -9,10 +8,10 @@ export default class JumpyStore {
   @observable
   accessor jumpWordCommitted = ""
 
-  // 原本的输入法
-  originalIM: IMEnum | undefined
-
   decorations: (vscode.DecorationOptions & { index: number; code: string })[] | undefined
+
+  // 进入jumpy模式中产生的订阅，把待注销的事柄存到队列，事件结束后执行
+  subscriptions: (() => void)[] = []
 
   @action
   input(value: string) {
@@ -21,8 +20,11 @@ export default class JumpyStore {
   }
 
   @action
-  reset() {
+  reset = () => {
     this.jumpWordCommitted = ""
     this.decorations = undefined
+    this.subscriptions.forEach((cb) => cb())
+    console.log("this.subscriptions", this.subscriptions)
+    this.subscriptions.length = 0
   }
 }

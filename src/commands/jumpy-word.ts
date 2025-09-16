@@ -2,7 +2,6 @@ import vscode from "vscode"
 
 import { Commands } from "../constants/common"
 import { jumpyJumpyEnter$ } from "../event-source/jumpy"
-import jumpyJumpService from "../services/jumpy-jump-service"
 import jumpyTextDecorationsService from "../services/jumpy-text-decorations"
 import jumpyWatchTypeService from "../services/jumpy-watch-type"
 import globalStore from "../store/global"
@@ -21,8 +20,6 @@ const jumpyWordCommand = (context: vscode.ExtensionContext) => {
 
     // 监听快捷代码输入
     jumpyWatchTypeService(context)
-    // 快捷代码输入完成即跳转
-    jumpyJumpService(context)
   })
 
   subscriptions.push(disposable)
