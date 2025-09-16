@@ -150,13 +150,11 @@ class DocumentController {
       this.reparseRange(new vscode.Range(position, position))
     }
     this.contentChangesArray.length = 0
-    console.log("this.tokensArray", this.tokensArray)
     const token = this.tokensArray[position.line]
     if (!token) return new TokensInfo(new vscode.Range(position, position), "", [])
     for (let index = token.tokens.length; index--; ) {
       const thisToken = token.tokens[index]
       if (thisToken.startIndex <= position.character) {
-        // console.log(process.hrtime()[1]-a); // TEST SPEED
         return new TokensInfo(
           new vscode.Range(position.line, thisToken.startIndex, position.line, thisToken.endIndex),
           this.document.lineAt(position.line).text.substring(thisToken.startIndex, thisToken.endIndex),

@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 
 import commands from "./commands"
-// import hcopesBoosterService from "./services/hscopes-booster-service"
+import hcopesBoosterService from "./services/hscopes-booster-service"
 import imService from "./services/im-service"
 import smartImeService from "./services/smart-ime"
 
@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
   // 智能IME
   smartImeService(context)
   // hscopes服务
-  // hcopesBoosterService(context)
+  hcopesBoosterService(context)
 
   commands.forEach((command) => command(context))
 }

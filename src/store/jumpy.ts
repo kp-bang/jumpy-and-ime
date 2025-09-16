@@ -3,6 +3,8 @@ import { action, observable } from "mobx"
 import { IMEnum } from "../constants/im"
 
 export default class JumpyStore {
+  @observable
+  accessor isJumpyMode = false
   // 跳转目标处的快捷键
   @observable
   accessor jumpWordCommitted = ""

@@ -13,7 +13,6 @@ export const twoLetterSequence = _.chain(range(97, 123))
   })
   .flatten()
   .value()
-console.log("twoLetterSequence", twoLetterSequence)
 
 const editorConfig = vscode.workspace.getConfiguration("editor")
 const fontFamily = editorConfig.get<string>("fontFamily")!

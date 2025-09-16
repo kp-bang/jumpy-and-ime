@@ -5,7 +5,6 @@ import openDocument from "./open-document"
 
 function unloadDocuments() {
   const documentsMap = globalStore.hscopes.documentsMap
-  console.log('%c [ documentsMap ]-8', 'font-size:13px; background:pink; color:#bf2c9f;', documentsMap)
 
   for (const thisDocController of documentsMap.values()) {
     thisDocController.dispose()

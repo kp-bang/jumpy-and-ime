@@ -3,7 +3,7 @@ import vscode from "vscode"
 function getLanguageScopeName(languageId: string) {
   try {
     const languages = vscode.extensions.all
-      .filter((x) => x.packageJSON && x.packageJSON.contributes && x.packageJSON.contributes.grammars)
+      .filter((x) => x.packageJSON?.contributes?.grammars)
       .reduce((a, b) => [...a, ...b.packageJSON.contributes.grammars], [] as any[])
     const matchingLanguages = languages.filter((g) => g.language === languageId)
     if (matchingLanguages.length > 0) {

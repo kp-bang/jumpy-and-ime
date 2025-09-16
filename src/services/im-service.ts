@@ -1,6 +1,7 @@
 import { isNil } from "lodash"
 import vscode from "vscode"
 
+import { Context } from "../constants/common"
 import { IMEnum } from "../constants/im"
 import { jumpyJumpyEnter$, jumpyJumpyExit$ } from "../event-source/jumpy"
 import globalStore from "../store/global"

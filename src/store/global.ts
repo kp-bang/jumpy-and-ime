@@ -1,14 +1,13 @@
-import { action, observable, reaction } from "mobx"
+import vscode from "vscode"
+import { action, reaction } from "mobx"
 import JumpyStore from "./jumpy"
 import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../event-source/jumpy"
 import IMStore from "./im"
 import SmartImeStore from "./smart-ime"
 import HscopesStore from "./hscopes"
+import { Context } from "../constants/common"
 
 class GlobalStore {
-  @observable
-  accessor isJumpyMode = false
-
   jumpy = new JumpyStore()
   im = new IMStore()
   smartIme = new SmartImeStore()
@@ -16,7 +15,6 @@ class GlobalStore {
 
   @action
   reset() {
-    this.isJumpyMode = false
     this.jumpy.reset()
   }
 }
@@ -27,11 +25,14 @@ export default globalStore
 
 // 进入jumpy模式
 jumpyJumpyEnter$.subscribe((decorations) => {
-  globalStore.isJumpyMode = true
+  vscode.commands.executeCommand("setContext", Context.isJumpyMode, true)
+  globalStore.jumpy.isJumpyMode = true
   globalStore.jumpy.decorations = decorations
 })
 // 退出jumpy模式
 jumpyJumpyExit$.subscribe(() => {
+  vscode.commands.executeCommand("setContext", Context.isJumpyMode, false)
+  globalStore.jumpy.isJumpyMode = false
   globalStore.reset()
 })
 

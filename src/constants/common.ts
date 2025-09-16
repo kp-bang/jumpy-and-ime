@@ -7,3 +7,7 @@ export enum Commands {
   jumpyUp5lines = `${extendsName}.jumpy-up-5lines`,
   jumpyDown5lines = `${extendsName}.jumpy-down-5lines`
 }
+
+export enum Context {
+  isJumpyMode = `${extendsName}.isJumpyMode`
+}
