@@ -24,30 +24,20 @@ class HscopesStore {
   // 明确要跳转到cn的scopes
   private cnScopes = ["comment"]
 
-  // 记录当前光标处的scopes
-  private scopes: string[] = []
-
-  private baseMatch(targetScopes: string[], changedScopes: string[]) {
+  private baseMatch(targetScopes: string[], changedScopes?: string[]) {
     return (
-      _.intersectionWith(targetScopes, changedScopes, (targetScope, enterScope) => enterScope.startsWith(targetScope))
-        .length > 0
+      _.intersectionWith(targetScopes, changedScopes || [], (targetScope, enterScope) =>
+        enterScope.startsWith(targetScope)
+      ).length > 0
     )
   }
 
-  matchSpecialScopes(curScopes: string[]) {
+  matchSpecialScopes(curScopes?: string[]) {
     return this.baseMatch(this.specialScopes, curScopes)
   }
 
-  matchCnScopes(curScopes: string[]) {
+  matchCnScopes(curScopes?: string[]) {
     return this.baseMatch(this.cnScopes, curScopes)
-  }
-
-  cursorMoveHandle(curScopes: string[]) {
-    const intersectScopes = _.intersection(this.scopes, curScopes)
-    const deletedScopes = _.difference(this.scopes, intersectScopes)
-    const addedScopes = _.difference(curScopes, intersectScopes)
-
-    this.scopes = curScopes
   }
 }
 

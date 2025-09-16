@@ -29,10 +29,6 @@ const dll = define({
 })
 
 export const switchIM = (type: IMEnum) => {
-  if (globalStore.im.currentIME === type) {
-    // console.log("switchIM不变")
-    return
-  }
   globalStore.im.currentIME = type
   open({
     library: "user32",

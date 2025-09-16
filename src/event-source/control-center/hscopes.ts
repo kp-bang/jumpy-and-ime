@@ -5,26 +5,13 @@ import globalStore from "../../store/global"
 import chineseAndSpaceSwitch from "../../utils/hscopes/chinese-and-space-switch"
 import chineseSwitchToChinese from "../../utils/hscopes/chinese-switch-to-chinese"
 import englishAndDoubleSpaceSwitch from "../../utils/hscopes/english-and-double-space-switch"
-import getScopeAt from "../../utils/hscopes/get-scope-at"
 import { switchIM } from "../../utils/im"
-import { hscopesCursorMove$, hscopesUpdateScopes$ } from "../hscopes"
+import { hscopesUpdateScopes$ } from "../hscopes"
 
 const hscopesControlRun = () => {
-  // 光标移动导致上下文变化
-  hscopesCursorMove$.subscribe(() => {
-    const editor = vscode.window.activeTextEditor
-    if (!editor) return
-
-    const document = editor?.document
-    const position = editor?.selections[0]?.active
-
-    const token = getScopeAt(document, position)
-    if (!token) return
-    hscopesUpdateScopes$.next(token.scopes)
-  })
-
   // 上下文变化，计算切换输入法
-  hscopesUpdateScopes$.subscribe(async (scopes) => {
+  hscopesUpdateScopes$.subscribe(async (params) => {
+    const [addedScopes, deletedScopes, scopes] = params || []
     // console.log("%c [ allScopes ]-30", "font-size:13px; background:pink; color:#bf2c9f;", scopes)
 
     const editor = vscode.window.activeTextEditor
@@ -45,7 +32,7 @@ const hscopesControlRun = () => {
      * 所以正则特例生效的前提是建立在当前的注释、string scopes上的
      */
 
-    // 特判
+    // 特例，关注当前全量scopes
     if (globalStore.hscopes.matchSpecialScopes(scopes)) {
       // console.log("进特批")
       /**
@@ -56,45 +43,45 @@ const hscopesControlRun = () => {
        * 所以命中即退出
        */
 
-      if (globalStore.im.currentIME === IMEnum.CN) {
-        // 如果前两个字符是中文加空格, 则切en换输入法
-        // console.log("chineseAndSpaceSwitch(document, position)", chineseAndSpaceSwitch(document, position))
-        if (globalStore.hscopes.enableChineseAndSpaceSwitchToEnglish && chineseAndSpaceSwitch(document, position)) {
-          switchIM(IMEnum.EN)
-          return
-        }
-        return // 进了特批，当前已经是cn输入法，也没有转向en，直接退出
-      } else {
-        // 如果前一个字符是中文, 则切换cn输入法
-        // console.log("chineseSwitchToChinese(document, position)", chineseSwitchToChinese(document, position))
-        if (globalStore.hscopes.enableChineseSwitchToChinese && chineseSwitchToChinese(document, position)) {
-          switchIM(IMEnum.CN)
-          return
-        }
+      // 如果前一个字符是中文, 则切换cn输入法
+      // console.log("chineseSwitchToChinese(document, position)", chineseSwitchToChinese(document, position))
+      if (globalStore.hscopes.enableChineseSwitchToChinese && chineseSwitchToChinese(document, position)) {
+        switchIM(IMEnum.CN)
+        return
+      }
 
-        // 英文加双空格, 则切换cn输入法
-        // console.log("englishAndDoubleSpaceSwitch(document, position)", englishAndDoubleSpaceSwitch(document, position))
-        if (
-          globalStore.hscopes.enableEnglishAndDoubleSpaceSwitchToChinese &&
-          englishAndDoubleSpaceSwitch(document, position)
-        ) {
-          const deleteRange = new vscode.Range(position.translate(0, -1), position)
-          await vscode.window.activeTextEditor?.edit((editBuilder) => {
-            editBuilder.delete(deleteRange)
-          })
-          switchIM(IMEnum.CN)
-          return
-        }
+      // 如果前两个字符是中文加空格, 则切en换输入法
+      // console.log("chineseAndSpaceSwitch(document, position)", chineseAndSpaceSwitch(document, position))
+      if (globalStore.hscopes.enableChineseAndSpaceSwitchToEnglish && chineseAndSpaceSwitch(document, position)) {
+        switchIM(IMEnum.EN)
+        return
+      }
+
+      // 英文加双空格, 则切换cn输入法
+      // console.log("englishAndDoubleSpaceSwitch(document, position)", englishAndDoubleSpaceSwitch(document, position))
+      if (
+        globalStore.hscopes.enableEnglishAndDoubleSpaceSwitchToChinese &&
+        englishAndDoubleSpaceSwitch(document, position)
+      ) {
+        const deleteRange = new vscode.Range(position.translate(0, -1), position)
+        await vscode.window.activeTextEditor?.edit((editBuilder) => {
+          editBuilder.delete(deleteRange)
+        })
+        switchIM(IMEnum.CN)
+        return
       }
     }
 
-    // scopes全量判断作最后兜底
-    if (globalStore.hscopes.matchCnScopes(scopes)) {
+    // 用增量scopes来判断，在scopes不变的情况下不会反复设置cn
+    if (globalStore.hscopes.matchCnScopes(addedScopes)) {
       // console.log("switchIMCN")
       switchIM(IMEnum.CN)
     } else {
-      // console.log("switchIMEN")
-      switchIM(IMEnum.EN)
+      // 当前的scopes没有需要cn输入法的了
+      if (!globalStore.hscopes.matchCnScopes(scopes) && !globalStore.hscopes.matchSpecialScopes(scopes)) {
+        // console.log("switchIMEN")
+        switchIM(IMEnum.EN)
+      }
     }
   })
 }

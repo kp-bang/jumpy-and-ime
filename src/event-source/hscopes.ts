@@ -1,4 +1,8 @@
-import { Subject } from "rxjs"
+import { map, Subject } from "rxjs"
+import vscode from "vscode"
+
+import getScopeAt from "../utils/hscopes/get-scope-at"
+import splitScopes from "../utils/hscopes/splite-scopes"
 
 // 光标移动、变化，可以计算当前scopes
 export const hscopesCursorMove$ = new Subject<void>()
@@ -11,5 +15,19 @@ export const hscopesPreChCharSpace$ = new Subject<void>()
 // 前两个自发是英文+2空格，当前不是拼音输入法，则转成拼音输入法
 export const hscopesPreEnCharSpaceSpace$ = new Subject<void>()
 
-// 最新的scopes，一次是enterScopes，leaveScopes和当前scopes
-export const hscopesUpdateScopes$ = new Subject<string[]>()
+// 最新的scopes，依次是enterScopes，leaveScopes和当前scopes
+export const hscopesUpdateScopes$ = hscopesCursorMove$.pipe<undefined | [string[], string[], string[]]>(
+  map(() => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) return
+
+    const document = editor?.document
+    const position = editor?.selections[0]?.active
+
+    const token = getScopeAt(document, position)
+    if (!token) return
+    const [deletedScopes, addedScopes] = splitScopes(token.scopes)
+
+    return [addedScopes, deletedScopes, token.scopes]
+  })
+)
