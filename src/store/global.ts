@@ -3,7 +3,7 @@ import JumpyStore from "./jumpy"
 import IMStore from "./im"
 import SmartImeStore from "./smart-ime"
 import HscopesStore from "./hscopes"
-import { jumpyJumpCodeComplete$ } from "../event-source/jumpy"
+import { jumpyJumpCodeComplete$, jumpyJumpWordCommittedUpdate$ } from "../event-source/jumpy"
 
 class GlobalStore {
   jumpy = new JumpyStore()
@@ -25,6 +25,8 @@ export default globalStore
 reaction(
   () => globalStore.jumpy.jumpWordCommitted,
   (code) => {
+    jumpyJumpWordCommittedUpdate$.next(code)
+
     if (code.length !== 2) return
     const decoration = globalStore.jumpy.decorations?.find((decoration) => decoration.code === code)
     jumpyJumpCodeComplete$.next(decoration)

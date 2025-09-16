@@ -4,6 +4,9 @@ import vscode from "vscode"
 // jumpy模式进入事件源
 export const jumpyJumpyEnter$ = new Subject<(vscode.DecorationOptions & { index: number; code: string })[]>()
 
+export const jumpyJumpWordCommittedUpdate$ = new Subject<string>()
+export const jumpyEscape$ = new Subject<void>()
+
 // jumpy模式退出事件源
 export const jumpyJumpyExit$ = new Subject<void>()
 

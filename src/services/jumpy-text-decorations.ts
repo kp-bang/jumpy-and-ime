@@ -1,10 +1,11 @@
 import fs from "fs"
 import _ from "lodash"
-import { map, timer } from "rxjs"
+import { combineLatest, map, startWith, timer } from "rxjs"
 import vscode from "vscode"
 
 import { extendsName } from "../constants/common"
 import { darkDataUriCache, decorationType, lightDataUriCache, twoLetterSequence } from "../constants/jumpy"
+import { jumpyJumpWordCommittedUpdate$ } from "../event-source/jumpy"
 import globalStore from "../store/global"
 import { getVisibleLines } from "../utils/lines"
 
@@ -49,12 +50,13 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     .flatten()
     .value()
 
-  const decorations = _.chain(Array.from({ length: Math.min(twoLetterSequence.length, splitWords.length) }))
-    .map<vscode.DecorationOptions & { index: number; code: string }>((_undefined, index) => {
+  const allDecorations = _.chain(Array.from({ length: Math.min(twoLetterSequence.length, splitWords.length) }))
+    .map<vscode.DecorationOptions & { index: number; filterIndex: number; code: string }>((_undefined, index) => {
       const code = twoLetterSequence[index]
       const { line, startCharacter } = splitWords[index]
       return {
-        index,
+        index, // 混合的部分，根据奇偶来错开展示
+        filterIndex: index,
         code,
         range: new vscode.Range(line, startCharacter, line, startCharacter + code.length),
         renderOptions: {
@@ -88,25 +90,43 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     return false
   }
 
-  // 筛选出有交叉部分的dec，只把有重叠部分的dec闪烁显示
-  const [fixedDecorations, mixedDecorations] = _.partition(decorations, (d) => {
-    const preD = decorations[d.index - 1]
-    const nextD = decorations[d.index + 1]
-
-    if (d.index === 0) {
-      return !judgeIntersection(d, nextD)
-    }
-
-    if (d.index === decorations.length - 1) {
-      return !judgeIntersection(preD, d)
-    }
-
-    return !judgeIntersection(preD, d) && !judgeIntersection(d, nextD)
-  })
+  // 根据jumpWordCommitted过滤掉多余的快捷代码展示
+  const filterDecorations$ = jumpyJumpWordCommittedUpdate$.pipe(
+    startWith(""),
+    map((jumpWordCommitted) => {
+      return allDecorations
+        .filter((decoration) => {
+          if (jumpWordCommitted) {
+            return decoration.code.startsWith(jumpWordCommitted)
+          }
+          return true
+        })
+        .map((decoration, index) => {
+          decoration.filterIndex = index // 更新filterIndex
+          return decoration
+        })
+    })
+  )
 
   // 防重叠闪烁
-  const rerender$ = timer(0, 1000).pipe(
-    map((count) => {
+  const rerender$ = combineLatest([timer(0, 1000), filterDecorations$]).pipe(
+    map(([count, filterDecorations]) => {
+      // 筛选出有交叉部分的dec，只把有重叠部分的dec闪烁显示
+      const [fixedDecorations, mixedDecorations] = _.partition(filterDecorations, (d) => {
+        const preD = filterDecorations[d.filterIndex - 1]
+        const nextD = filterDecorations[d.filterIndex + 1]
+
+        if (d.filterIndex === 0) {
+          return !judgeIntersection(d, nextD)
+        }
+
+        if (d.filterIndex === filterDecorations.length - 1) {
+          return !judgeIntersection(preD, d)
+        }
+
+        return !judgeIntersection(preD, d) && !judgeIntersection(d, nextD)
+      })
+
       return [
         ...fixedDecorations,
         ...mixedDecorations.filter((_, index) => {
@@ -121,7 +141,7 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
 
   globalStore.jumpy.subscriptions.push(() => rerenderSubscript.unsubscribe())
 
-  return decorations
+  return allDecorations
 }
 
 export default jumpyTextDecorationsService

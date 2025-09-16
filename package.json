@@ -15,10 +15,36 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "jumpy-and-ime.jumpy-word",
+        "key": "shift+enter",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-escape",
+        "key": "Escape",
+        "when": "editorTextFocus && jumpy-and-ime.isJumpyMode"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-up-5lines",
+        "key": "ctrl+alt+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-down-5lines",
+        "key": "ctrl+alt+j",
+        "when": "editorTextFocus"
+      }
+    ],
     "commands": [
       {
         "command": "jumpy-and-ime.jumpy-word",
         "title": "Jumpy Word Mode"
+      },
+      {
+        "command": "jumpy-and-ime.jumpy-escape",
+        "title": "jumpy escape"
       },
       {
         "command": "jumpy-and-ime.jumpy-exit",

@@ -1,3 +1,4 @@
+import { runInAction } from "mobx"
 import vscode from "vscode"
 
 import { Context } from "../../constants/common"
@@ -5,7 +6,7 @@ import { IMEnum } from "../../constants/im"
 import { decorationType } from "../../constants/jumpy"
 import globalStore from "../../store/global"
 import { obtainIM, switchIM } from "../../utils/im"
-import { jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../jumpy"
+import { jumpyEscape$, jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../jumpy"
 import hscopesControlRun from "./hscopes"
 
 const controlCenterRun = () => {
@@ -36,6 +37,16 @@ const controlCenterRun = () => {
 
     const reviewType = vscode.TextEditorRevealType.Default
     vscode.window.activeTextEditor.revealRange(vscode.window.activeTextEditor.selection, reviewType)
+
+    jumpyJumpyExit$.next()
+  })
+
+  // escape按下，若已输入1个char，则删除，没有则退出jumpy模式
+  jumpyEscape$.subscribe(() => {
+    if (globalStore.jumpy.jumpWordCommitted) {
+      runInAction(() => (globalStore.jumpy.jumpWordCommitted = ""))
+      return
+    }
 
     jumpyJumpyExit$.next()
   })
