@@ -12,4 +12,4 @@ export const hscopesPreChCharSpace$ = new Subject<void>()
 export const hscopesPreEnCharSpaceSpace$ = new Subject<void>()
 
 // 最新的scopes，一次是enterScopes，leaveScopes和当前scopes
-export const hscopesUpdateScopes$ = new Subject<[string[], string[], string[]]>()
+export const hscopesUpdateScopes$ = new Subject<string[]>()

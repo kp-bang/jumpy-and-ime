@@ -18,14 +18,14 @@ class HscopesStore {
   // 检测到当前行前有中文，且光标前是非中文+双空格时切换输入法到中文并删掉一个空格
   enableEnglishAndDoubleSpaceSwitchToChinese = true
 
-  // 进入某些 scopes 时切换输入法到中文，用逗号分割，前缀匹配，例如 `comment,string` 就可以匹配 Python 的 `comment.line.number-sign.python`（注释）和 `string.quoted.single.python`（字符串），请使用 `Developer: Inspect Editor Tokens and Scopes` 命令查看 scopes
-  private enterScopesSwitchToChinese = ["comment"] as string[]
-  // 进入某些 scopes 时切换输入法到英文，用逗号分割，前缀匹配，例如 `comment,string` 就可以匹配 Python 的 `comment.line.number-sign.python`（注释）和 `string.quoted.single.python`（字符串），请使用 `Developer: Inspect Editor Tokens and Scopes` 命令查看 scopes
-  private enterScopesSwitchToEnglish = ["markup.math", "meta.math"] as string[]
-  // 离开某些 scopes 时切换输入法到中文，用逗号分割，前缀匹配，例如 `comment,string` 就可以匹配 Python 的 `comment.line.number-sign.python`（注释）和 `string.quoted.single.python`（字符串），请使用 `Developer: Inspect Editor Tokens and Scopes` 命令查看 scopes
-  private leaveScopesSwitchToChinese = ["markup.math", "meta.math"] as string[]
-  // 离开某些 scopes 时切换输入法到英文，用逗号分割，前缀匹配，例如 `comment,string` 就可以匹配 Python 的 `comment.line.number-sign.python`（注释）和 `string.quoted.single.python`（字符串），请使用 `Developer: Inspect Editor Tokens and Scopes` 命令查看 scopes
-  private leaveScopesSwitchToEnglish = ["comment", "string"] as string[]
+  // 进入特判的scopes
+  private specialScopes = ["comment", "string"]
+
+  // 明确要跳转到cn的scopes
+  private cnScopes = ["comment"]
+
+  // 记录当前光标处的scopes
+  private scopes: string[] = []
 
   private baseMatch(targetScopes: string[], changedScopes: string[]) {
     return (
@@ -34,20 +34,20 @@ class HscopesStore {
     )
   }
 
-  matchEnterSwitchToChinese(enterScopes: string[]) {
-    return this.baseMatch(this.enterScopesSwitchToChinese, enterScopes)
+  matchSpecialScopes(curScopes: string[]) {
+    return this.baseMatch(this.specialScopes, curScopes)
   }
 
-  matchEnterSwitchToEnglish(enterScopes: string[]) {
-    return this.baseMatch(this.enterScopesSwitchToEnglish, enterScopes)
+  matchCnScopes(curScopes: string[]) {
+    return this.baseMatch(this.cnScopes, curScopes)
   }
 
-  matchLeaveSwitchToChinese(leaveScopes: string[]) {
-    return this.baseMatch(this.leaveScopesSwitchToChinese, leaveScopes)
-  }
+  cursorMoveHandle(curScopes: string[]) {
+    const intersectScopes = _.intersection(this.scopes, curScopes)
+    const deletedScopes = _.difference(this.scopes, intersectScopes)
+    const addedScopes = _.difference(curScopes, intersectScopes)
 
-  matchLeaveSwitchToEnglish(leaveScopes: string[]) {
-    return this.baseMatch(this.leaveScopesSwitchToEnglish, leaveScopes)
+    this.scopes = curScopes
   }
 }
 
