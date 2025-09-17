@@ -29,7 +29,6 @@ const dll = define({
 })
 
 export const switchIM = (type: IMEnum) => {
-  globalStore.im.currentIME = type
   open({
     library: "user32",
     path: "user32"

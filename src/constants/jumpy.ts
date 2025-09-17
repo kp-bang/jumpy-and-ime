@@ -1,64 +1,72 @@
-import _, { range } from "lodash"
+import _, { Dictionary, range } from "lodash"
+import { autorun } from "mobx"
 import vscode from "vscode"
 
+import configuration from "../configuration"
 import { getSvgDataUri } from "../utils/create-svg-uri"
 
-// 快捷键字母组合，如aa、ab、ac到zx、zy、zz
-export const twoLetterSequence = _.chain(range(97, 123))
-  .map((i) => {
-    const codes = range(97, 123).map((j) => {
-      return `${String.fromCharCode(i)}${String.fromCharCode(j)}`
-    })
-    return codes
-  })
-  .flatten()
-  .value()
-
-const editorConfig = vscode.workspace.getConfiguration("editor")
-const fontFamily = editorConfig.get<string>("fontFamily")!
-const fontSize = editorConfig.get<number>("fontSize") || 14
-
-const colors = {
-  darkBgColor: "white",
-  darkFgColor: "black",
-  lightBgColor: "back",
-  lightFgColor: "white"
-}
-
-const darkDecoration = {
-  bgColor: colors.darkBgColor,
-  fgColor: colors.darkFgColor,
-  fontFamily: fontFamily,
-  fontSize: fontSize
-}
-const lightDecoration = {
-  bgColor: colors.lightBgColor,
-  fgColor: colors.lightFgColor,
-  fontFamily: fontFamily,
-  fontSize: fontSize
-}
-
-export const [darkDataUriCache, lightDataUriCache] = _.chain([darkDecoration, lightDecoration])
-  .map((decoration) => {
-    return _.chain(twoLetterSequence)
-      .map((code) => {
-        return [code, getSvgDataUri(code, decoration)]
+class JumpyConstants {
+  // 快捷键字母组合，如aa、ab、ac到zx、zy、zz
+  twoLetterSequence = _.chain(range(97, 123))
+    .map((i) => {
+      const codes = range(97, 123).map((j) => {
+        return `${String.fromCharCode(i)}${String.fromCharCode(j)}`
       })
-      .fromPairs()
-      .value()
-  })
-  .value()
+      return codes
+    })
+    .flatten()
+    .value()
 
-const width = fontSize + 4
-const height = fontSize + 4
-const left = -width
-// const right = -width // 使用负的margin把图片往左拉回去，这样就不会有实际占位，代码文本不会抖动
+  darkDataUriCache!: Dictionary<vscode.Uri>
+  lightDataUriCache!: Dictionary<vscode.Uri>
+  decorationType!: vscode.TextEditorDecorationType
 
-export const decorationType = vscode.window.createTextEditorDecorationType({
-  after: {
-    // margin: `0 ${right}px 0 0`,
-    margin: `0 0 0 ${left}px`,
-    height: `${height}px`,
-    width: `${width}px`
+  constructor() {
+    autorun(() => {
+      this.updateJumpyConstant()
+    })
   }
-})
+
+  private updateJumpyConstant = () => {
+    const darkDecoration = {
+      bgColor: configuration.jumpy.darkThemeBackground,
+      fgColor: configuration.jumpy.darkThemeForeground,
+      fontFamily: configuration.editorConfig.fontFamily,
+      fontSize: configuration.editorConfig.fontSize
+    }
+    const lightDecoration = {
+      bgColor: configuration.jumpy.lightThemeBackground,
+      fgColor: configuration.jumpy.lightThemeForeground,
+      fontFamily: configuration.editorConfig.fontFamily,
+      fontSize: configuration.editorConfig.fontSize
+    }
+
+    ;[this.darkDataUriCache, this.lightDataUriCache] = _.chain([darkDecoration, lightDecoration])
+      .map((decoration) => {
+        return _.chain(this.twoLetterSequence)
+          .map((code) => {
+            return [code, getSvgDataUri(code, decoration)]
+          })
+          .fromPairs()
+          .value()
+      })
+      .value()
+
+    const width = configuration.editorConfig.fontSize + 4
+    const height = configuration.editorConfig.fontSize + 4
+    const left = -width // 使用负的margin把图片往左拉回去，这样就不会有实际占位，代码文本不会抖动
+
+    this.decorationType = vscode.window.createTextEditorDecorationType({
+      after: {
+        // margin: `0 ${right}px 0 0`,
+        margin: `0 0 0 ${left}px`,
+        height: `${height}px`,
+        width: `${width}px`
+      }
+    })
+  }
+}
+
+const jumpyConstants = new JumpyConstants()
+
+export default jumpyConstants

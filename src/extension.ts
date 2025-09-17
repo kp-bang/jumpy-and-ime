@@ -1,10 +1,12 @@
 import * as vscode from "vscode"
 
 import commands from "./commands"
+import configuration from "./configuration"
 import controlCenterRun from "./event-source/control-center"
 import hcopesBoosterService from "./services/hscopes-booster-service"
-import imService from "./services/im-service"
 import smartImeService from "./services/smart-ime"
+import { setCursor } from "./utils/cursor"
+import { obtainIM } from "./utils/im"
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "jumpy-and-ime" is now active!')
@@ -14,8 +16,13 @@ export function activate(context: vscode.ExtensionContext) {
   // })
   // context.subscriptions.push(disposable)
 
-  // im服务
-  imService(context)
+  // 更新当前cursor
+  const currentIM = obtainIM()
+  setCursor(currentIM)
+
+  // configuration初始化
+  configuration.setContext(context)
+
   // 智能IME
   smartImeService(context)
   // hscopes服务

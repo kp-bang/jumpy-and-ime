@@ -5,8 +5,8 @@ export enum Commands {
   jumpyWord = `${extendsName}.jumpy-word`,
   jumpyEscape = `${extendsName}.jumpy-escape`,
   jumpyExit = `${extendsName}.jumpy-exit`,
-  jumpyUp5lines = `${extendsName}.jumpy-up-5lines`,
-  jumpyDown5lines = `${extendsName}.jumpy-down-5lines`
+  jumpyUpLines = `${extendsName}.jumpy-up-lines`,
+  jumpyDownLines = `${extendsName}.jumpy-down-lines`
 }
 
 export enum Context {

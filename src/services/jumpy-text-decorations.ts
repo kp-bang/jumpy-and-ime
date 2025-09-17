@@ -1,10 +1,9 @@
-import fs from "fs"
 import _ from "lodash"
 import { combineLatest, map, startWith, timer } from "rxjs"
 import vscode from "vscode"
 
-import { extendsName } from "../constants/common"
-import { darkDataUriCache, decorationType, lightDataUriCache, twoLetterSequence } from "../constants/jumpy"
+import configuration from "../configuration"
+import jumpyConstants from "../constants/jumpy"
 import { jumpyJumpWordCommittedUpdate$ } from "../event-source/jumpy"
 import globalStore from "../store/global"
 import { getVisibleLines } from "../utils/lines"
@@ -17,19 +16,12 @@ interface JumpyPosition {
   startCharacter: number
 }
 
-const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
+const jumpyTextDecorationsService = () => {
   const editor = vscode.window.activeTextEditor
 
   const lines = getVisibleLines(editor!)
 
-  const configuration = vscode.workspace.getConfiguration(extendsName)
-  // const defaultRegexp = "\\w{2,}" // TODO:
-  const defaultRegexp = fs.readFileSync(
-    `C:\\Users\\Lizhixian\\Desktop\\myself\\jumpy-and-ime\\src\\services\\regexp-text.txt`,
-    "utf8"
-  )
-
-  const wordRegexp = configuration ? configuration.get<string>("wordRegexp", defaultRegexp) : defaultRegexp
+  const wordRegexp = configuration.jumpy.wordRegexp || "\\w{2,}"
   const regexp = new RegExp(wordRegexp, "g")
 
   const splitWords = _.chain(lines)
@@ -49,6 +41,8 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     })
     .flatten()
     .value()
+
+  const { twoLetterSequence, darkDataUriCache, lightDataUriCache } = jumpyConstants
 
   const allDecorations = _.chain(Array.from({ length: Math.min(twoLetterSequence.length, splitWords.length) }))
     .map<vscode.DecorationOptions & { index: number; filterIndex: number; code: string }>((_undefined, index) => {
@@ -136,7 +130,7 @@ const jumpyTextDecorationsService = (context: vscode.ExtensionContext) => {
     })
   )
   const rerenderSubscript = rerender$.subscribe((decorations) => {
-    editor?.setDecorations(decorationType, decorations)
+    editor?.setDecorations(jumpyConstants.decorationType, decorations)
   })
 
   globalStore.jumpy.subscriptions.push(() => rerenderSubscript.unsubscribe())

@@ -3,7 +3,6 @@ import vscode from "vscode"
 export interface Decoration {
   bgColor: string
   fgColor: string
-
   fontFamily: string
   fontSize: number
 }

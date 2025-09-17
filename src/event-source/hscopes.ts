@@ -1,6 +1,8 @@
-import { map, Subject } from "rxjs"
+import { filter, map, Subject } from "rxjs"
 import vscode from "vscode"
 
+import configuration from "../configuration"
+import globalStore from "../store/global"
 import getScopeAt from "../utils/hscopes/get-scope-at"
 import splitScopes from "../utils/hscopes/splite-scopes"
 
@@ -16,8 +18,12 @@ export const hscopesPreChCharSpace$ = new Subject<void>()
 export const hscopesPreEnCharSpaceSpace$ = new Subject<void>()
 
 // 最新的scopes，依次是enterScopes，leaveScopes和当前scopes
-export const hscopesUpdateScopes$ = hscopesCursorMove$.pipe<undefined | [string[], string[], string[]]>(
-  map(() => {
+export const hscopesUpdateScopes$ = hscopesCursorMove$.pipe(
+  filter(
+    () =>
+      configuration.smartIme.smartImeEnable && !globalStore.jumpy.isJumpyMode && !globalStore.smartIme.smartImeDisabled
+  ),
+  map<void, undefined | [string[], string[], string[]]>(() => {
     const editor = vscode.window.activeTextEditor
     if (!editor) return
 

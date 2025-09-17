@@ -1,7 +1,8 @@
+import _ from "lodash"
 import vscode from "vscode"
 
+import configuration from "../../configuration"
 import { IMEnum } from "../../constants/im"
-import globalStore from "../../store/global"
 import chineseAndSpaceSwitch from "../../utils/hscopes/chinese-and-space-switch"
 import chineseSwitchToChinese from "../../utils/hscopes/chinese-switch-to-chinese"
 import englishAndDoubleSpaceSwitch from "../../utils/hscopes/english-and-double-space-switch"
@@ -20,6 +21,26 @@ const hscopesControlRun = () => {
     const document = editor?.document
     const position = editor?.selections[0]?.active
 
+    const baseMatch = (targetScopes: string[], changedScopes?: string[]) => {
+      return (
+        _.intersectionWith(targetScopes, changedScopes || [], (targetScope, enterScope) =>
+          enterScope.startsWith(targetScope)
+        ).length > 0
+      )
+    }
+
+    const matchSpecialScopes = (curScopes?: string[]) => {
+      if (!configuration.smartIme.enterScopesFurtherMatch) return false
+      const scopes = configuration.smartIme.enterScopesFurtherMatch.split(",")
+      return baseMatch(scopes, curScopes)
+    }
+
+    const matchCnScopes = (curScopes?: string[]) => {
+      if (!configuration.smartIme.enterScopesToCnMatch) return false
+      const scopes = configuration.smartIme.enterScopesToCnMatch.split(",")
+      return baseMatch(scopes, curScopes)
+    }
+
     /**
      * 重新理解scopes和输入法的关系
      * 在代码中主体绝对是en，何时需要cn？
@@ -33,7 +54,7 @@ const hscopesControlRun = () => {
      */
 
     // 特例，关注当前全量scopes
-    if (globalStore.hscopes.matchSpecialScopes(scopes)) {
+    if (matchSpecialScopes(scopes)) {
       // console.log("进特批")
       /**
        * 这应该是一个确定性的程序
@@ -45,14 +66,14 @@ const hscopesControlRun = () => {
 
       // 如果前一个字符是中文, 则切换cn输入法
       // console.log("chineseSwitchToChinese(document, position)", chineseSwitchToChinese(document, position))
-      if (globalStore.hscopes.enableChineseSwitchToChinese && chineseSwitchToChinese(document, position)) {
+      if (configuration.smartIme.enableMatchCnCursorToCn && chineseSwitchToChinese(document, position)) {
         switchIM(IMEnum.CN)
         return
       }
 
       // 如果前两个字符是中文加空格, 则切en换输入法
       // console.log("chineseAndSpaceSwitch(document, position)", chineseAndSpaceSwitch(document, position))
-      if (globalStore.hscopes.enableChineseAndSpaceSwitchToEnglish && chineseAndSpaceSwitch(document, position)) {
+      if (configuration.smartIme.enableMatchCnSpaceCursorToEn && chineseAndSpaceSwitch(document, position)) {
         switchIM(IMEnum.EN)
         return
       }
@@ -60,7 +81,7 @@ const hscopesControlRun = () => {
       // 英文加双空格, 则切换cn输入法
       // console.log("englishAndDoubleSpaceSwitch(document, position)", englishAndDoubleSpaceSwitch(document, position))
       if (
-        globalStore.hscopes.enableEnglishAndDoubleSpaceSwitchToChinese &&
+        configuration.smartIme.enableMatchEnDoubleSpaceCursorToCn &&
         englishAndDoubleSpaceSwitch(document, position)
       ) {
         const deleteRange = new vscode.Range(position.translate(0, -1), position)
@@ -73,12 +94,12 @@ const hscopesControlRun = () => {
     }
 
     // 用增量scopes来判断，在scopes不变的情况下不会反复设置cn
-    if (globalStore.hscopes.matchCnScopes(addedScopes)) {
+    if (matchCnScopes(addedScopes)) {
       // console.log("switchIMCN")
       switchIM(IMEnum.CN)
     } else {
       // 当前的scopes没有需要cn输入法的了
-      if (!globalStore.hscopes.matchCnScopes(scopes) && !globalStore.hscopes.matchSpecialScopes(scopes)) {
+      if (!matchSpecialScopes(scopes)) {
         // console.log("switchIMEN")
         switchIM(IMEnum.EN)
       }
