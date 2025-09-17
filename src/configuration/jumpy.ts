@@ -6,6 +6,7 @@ export interface JumpyConfiguration {
   jumpyEnable: boolean
   movingStepLength: number
   wordRegexp: string
+  maxCodeCount: number
   darkThemeBackground: string
   darkThemeForeground: string
   lightThemeBackground: string
@@ -17,6 +18,7 @@ export const getJumpyConfiguration = () => {
     "jumpyEnable",
     "movingStepLength",
     "wordRegexp",
+    "maxCodeCount",
     "darkThemeBackground",
     "darkThemeForeground",
     "lightThemeBackground",

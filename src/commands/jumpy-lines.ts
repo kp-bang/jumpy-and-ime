@@ -7,13 +7,13 @@ import jumpLines from "../utils/jumpy-lines"
 const jumpyLinesCommand = (context: vscode.ExtensionContext) => {
   const jumpyUp5LinesDisposable = vscode.commands.registerCommand(Commands.jumpyUpLines, () => {
     const length = configuration.jumpy.movingStepLength
-    jumpLines(-parseInt(`${length}`))
+    jumpLines(-length)
   })
   context.subscriptions.push(jumpyUp5LinesDisposable)
 
   const jumpyDown5LinesDisposable = vscode.commands.registerCommand(Commands.jumpyDownLines, () => {
     const length = configuration.jumpy.movingStepLength
-    jumpLines(parseInt(`${length}`))
+    jumpLines(length)
   })
   context.subscriptions.push(jumpyDown5LinesDisposable)
 }

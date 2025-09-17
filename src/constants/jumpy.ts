@@ -1,4 +1,4 @@
-import _, { Dictionary, range } from "lodash"
+import _, { clamp, Dictionary, range } from "lodash"
 import { autorun } from "mobx"
 import vscode from "vscode"
 
@@ -7,15 +7,7 @@ import { getSvgDataUri } from "../utils/create-svg-uri"
 
 class JumpyConstants {
   // 快捷键字母组合，如aa、ab、ac到zx、zy、zz
-  twoLetterSequence = _.chain(range(97, 123))
-    .map((i) => {
-      const codes = range(97, 123).map((j) => {
-        return `${String.fromCharCode(i)}${String.fromCharCode(j)}`
-      })
-      return codes
-    })
-    .flatten()
-    .value()
+  twoLetterSequence!: string[]
 
   darkDataUriCache!: Dictionary<vscode.Uri>
   lightDataUriCache!: Dictionary<vscode.Uri>
@@ -28,6 +20,17 @@ class JumpyConstants {
   }
 
   private updateJumpyConstant = () => {
+    this.twoLetterSequence = _.chain(range(97, 123))
+      .map((i) => {
+        const codes = range(97, 123).map((j) => {
+          return `${String.fromCharCode(i)}${String.fromCharCode(j)}`
+        })
+        return codes
+      })
+      .flatten()
+      .take(clamp(configuration.jumpy.maxCodeCount, 26, 26 * 26))
+      .value()
+
     const darkDecoration = {
       bgColor: configuration.jumpy.darkThemeBackground,
       fgColor: configuration.jumpy.darkThemeForeground,

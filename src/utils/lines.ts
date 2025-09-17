@@ -12,7 +12,7 @@ export function getVisibleLines(editor: vscode.TextEditor) {
         end: range.end.line
       }
       if (index === 0) {
-        block.start = clamp(range.start.line - 30, 0, range.start.line) // 向上多取30行
+        block.start = clamp(range.start.line - 10, 0, range.start.line) // 向上多取10行
       }
       if (index === visibleRanges.length - 1) {
         block.end = clamp(last(visibleRanges)!.end.line + 30, last(visibleRanges)!.end.line, document.lineCount) // 向下多取30行
