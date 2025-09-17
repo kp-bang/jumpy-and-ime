@@ -4,11 +4,11 @@ import vscode from "vscode"
 import { Context } from "../../constants/common"
 import { IMEnum } from "../../constants/im"
 import jumpyConstants from "../../constants/jumpy"
+import jumpyTextDecorationsService from "../../services/jumpy-text-decorations"
+import jumpyWatchTypeService from "../../services/jumpy-watch-type"
 import globalStore from "../../store/global"
 import { obtainIM, switchIM } from "../../utils/im"
 import { jumpyEscape$, jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../jumpy"
-import jumpyTextDecorationsService from "../../services/jumpy-text-decorations"
-import jumpyWatchTypeService from "../../services/jumpy-watch-type"
 
 const jumpyControlRun = () => {
   // 进入jumpy模式
@@ -30,19 +30,18 @@ const jumpyControlRun = () => {
 
   // 监听跳转目标
   jumpyJumpCodeComplete$.subscribe((decoration) => {
-    if (!decoration) {
+    if (decoration) {
+      const { range } = decoration || {}
+
+      if (!vscode.window.activeTextEditor) return
+
+      vscode.window.activeTextEditor.selection = new vscode.Selection(range.start, range.start)
+
+      const reviewType = vscode.TextEditorRevealType.Default
+      vscode.window.activeTextEditor.revealRange(vscode.window.activeTextEditor.selection, reviewType)
+    } else {
       vscode.window.showInformationMessage("找不到目标，光标跳转失败")
-      return
     }
-
-    const { range } = decoration
-
-    if (!vscode.window.activeTextEditor) return
-
-    vscode.window.activeTextEditor.selection = new vscode.Selection(range.start, range.start)
-
-    const reviewType = vscode.TextEditorRevealType.Default
-    vscode.window.activeTextEditor.revealRange(vscode.window.activeTextEditor.selection, reviewType)
 
     jumpyJumpyExit$.next()
   })

@@ -1,12 +1,14 @@
 import vscode from "vscode"
 import _ from "lodash"
-import { action, makeObservable } from "mobx"
+import { action, makeAutoObservable, reaction } from "mobx"
 
 import { getJumpyConfiguration } from "./jumpy"
 import { getEditorConfig } from "./utils"
 import { getImConfiguration } from "./im"
 import { getSmartIMEConfiguration } from "./smart-ime"
 import { extendsName } from "../constants/common"
+import { setCursor } from "../utils/cursor"
+import { IMEnum } from "../constants/im"
 
 class Configuration {
   editorConfig = getEditorConfig()
@@ -15,7 +17,7 @@ class Configuration {
   smartIme = getSmartIMEConfiguration()
 
   constructor() {
-    makeObservable(this)
+    makeAutoObservable(this)
   }
 
   @action
@@ -40,3 +42,13 @@ class Configuration {
 const configuration = new Configuration()
 
 export default configuration
+
+reaction(
+  () => configuration.smartIme.smartImeEnable,
+  (smartImeEnable) => {
+    if (smartImeEnable) return
+
+    // 从根本上关闭了smartIme功能，就把光标恢复默认状态
+    setCursor(IMEnum.EN)
+  }
+)
