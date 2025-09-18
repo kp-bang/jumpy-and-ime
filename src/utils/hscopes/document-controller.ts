@@ -63,7 +63,7 @@ class DocumentController {
      */
     this.subscriptions.push(
       vscode.workspace.onDidChangeTextDocument((e) => {
-        if (e.document == this.document && e.contentChanges.length) {
+        if (e.document === this.document && e.contentChanges.length) {
           const changes = [...e.contentChanges].sort((change1, change2) =>
             change1.range.start.isAfter(change2.range.start) ? 1 : -1
           )

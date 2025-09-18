@@ -1,14 +1,14 @@
-import vscode from "vscode"
 import _ from "lodash"
-import { action, makeAutoObservable, reaction } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
+import vscode from "vscode"
 
-import { getJumpyConfiguration } from "./jumpy"
-import { getEditorConfig } from "./utils"
-import { getImConfiguration } from "./im"
-import { getSmartIMEConfiguration } from "./smart-ime"
 import { extendsName } from "../constants/common"
-import { setCursor } from "../utils/cursor"
 import { IMEnum } from "../constants/im"
+import { setCursor } from "../utils/cursor"
+import { getImConfiguration } from "./im"
+import { getJumpyConfiguration } from "./jumpy"
+import { getSmartIMEConfiguration } from "./smart-ime"
+import { getEditorConfig } from "./utils"
 
 class Configuration {
   editorConfig = getEditorConfig()
@@ -20,7 +20,6 @@ class Configuration {
     makeAutoObservable(this)
   }
 
-  @action
   private update() {
     this.editorConfig = getEditorConfig()
     this.jumpy = getJumpyConfiguration()

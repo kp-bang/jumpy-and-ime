@@ -223,6 +223,8 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.6.0",
     "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",

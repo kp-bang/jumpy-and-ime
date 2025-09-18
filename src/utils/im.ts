@@ -1,7 +1,6 @@
 import { close, DataType, define, open } from "ffi-rs"
 
 import { IMEnum } from "../constants/im"
-import globalStore from "../store/global"
 import { setCursor } from "./cursor"
 
 const dll = define({

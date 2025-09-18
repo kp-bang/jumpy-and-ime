@@ -1,9 +1,10 @@
-import { action, reaction } from "mobx"
-import JumpyStore from "./jumpy"
-import IMStore from "./im"
-import SmartImeStore from "./smart-ime"
-import HscopesStore from "./hscopes"
+import { action, makeObservable, reaction } from "mobx"
+
 import { jumpyJumpCodeComplete$, jumpyJumpWordCommittedUpdate$ } from "../event-source/jumpy"
+import HscopesStore from "./hscopes"
+import IMStore from "./im"
+import JumpyStore from "./jumpy"
+import SmartImeStore from "./smart-ime"
 
 class GlobalStore {
   jumpy = new JumpyStore()
@@ -11,7 +12,12 @@ class GlobalStore {
   smartIme = new SmartImeStore()
   hscopes = new HscopesStore()
 
-  @action
+  constructor() {
+    makeObservable(this, {
+      reset: action
+    })
+  }
+
   reset = () => {
     this.jumpy.reset()
   }
