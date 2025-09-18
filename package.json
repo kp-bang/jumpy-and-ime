@@ -246,8 +246,5 @@
     "rxjs": "^7.8.2",
     "vscode-oniguruma": "^1.6.2",
     "vscode-textmate": "^6.0.0"
-  },
-  "extensionDependencies": [
-    "bang.hscopes-booster"
-  ]
+  }
 }
