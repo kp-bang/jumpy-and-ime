@@ -7,16 +7,13 @@ import jumpyConstants from "../../constants/jumpy"
 import jumpyTextDecorationsService from "../../services/jumpy-text-decorations"
 import jumpyWatchTypeService from "../../services/jumpy-watch-type"
 import globalStore from "../../store/global"
-import { obtainIM, switchIM } from "../../utils/im"
+import { switchIM } from "../../utils/im"
 import { jumpyEscape$, jumpyJumpCodeComplete$, jumpyJumpyEnter$, jumpyJumpyExit$ } from "../jumpy"
 
 const jumpyControlRun = () => {
   // 进入jumpy模式
   jumpyJumpyEnter$.subscribe(() => {
-    const im = obtainIM()
-    if (im !== IMEnum.EN) {
-      switchIM(IMEnum.EN)
-    }
+    switchIM(IMEnum.EN)
     // 展示跳转快捷代码图片
     const decorations = jumpyTextDecorationsService()
     // 监听快捷代码输入

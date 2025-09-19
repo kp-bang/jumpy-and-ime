@@ -34,14 +34,14 @@ class JumpyConstants {
     const darkDecoration = {
       bgColor: configuration.jumpy.darkThemeBackground,
       fgColor: configuration.jumpy.darkThemeForeground,
-      fontFamily: configuration.editorConfig.fontFamily,
-      fontSize: configuration.editorConfig.fontSize
+      fontFamily: configuration.jumpy.fontFamily || configuration.editorConfig.fontFamily,
+      fontSize: configuration.jumpy.fontSize || configuration.editorConfig.fontSize
     }
     const lightDecoration = {
       bgColor: configuration.jumpy.lightThemeBackground,
       fgColor: configuration.jumpy.lightThemeForeground,
-      fontFamily: configuration.editorConfig.fontFamily,
-      fontSize: configuration.editorConfig.fontSize
+      fontFamily: configuration.jumpy.fontFamily || configuration.editorConfig.fontFamily,
+      fontSize: configuration.jumpy.fontSize || configuration.editorConfig.fontSize
     }
 
     ;[this.darkDataUriCache, this.lightDataUriCache] = _.chain([darkDecoration, lightDecoration])

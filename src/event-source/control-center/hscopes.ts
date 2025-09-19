@@ -12,7 +12,7 @@ import { hscopesUpdateScopes$ } from "../hscopes"
 const hscopesControlRun = () => {
   // 上下文变化，计算切换输入法
   hscopesUpdateScopes$.subscribe(async (params) => {
-    const [addedScopes, deletedScopes, scopes] = params || []
+    const { addedScopes, deletedScopes, curScopes: scopes } = params || []
     // console.log("%c [ allScopes ]-30", "font-size:13px; background:pink; color:#bf2c9f;", scopes)
 
     const editor = vscode.window.activeTextEditor

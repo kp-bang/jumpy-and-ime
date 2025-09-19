@@ -1,16 +1,17 @@
 import _ from "lodash"
 
-// 维护当前光标处的scopes
-let scopes: string[] = []
-
-const splitScopes = (curScopes: string[]) => {
+/**
+ *
+ * @param scopes 存储的scopes
+ * @param curScopes 当前更新的scopes
+ * @returns 删除的，和增加的scopes
+ */
+const splitScopes = (scopes: string[], curScopes: string[]) => {
   const intersectScopes = _.intersection(scopes, curScopes)
   const deletedScopes = _.difference(scopes, intersectScopes)
   const addedScopes = _.difference(curScopes, intersectScopes)
 
-  scopes = curScopes
-
-  return [deletedScopes, addedScopes]
+  return { deletedScopes, addedScopes }
 }
 
 export default splitScopes

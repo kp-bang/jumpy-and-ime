@@ -4,6 +4,7 @@ import { getConfiguration } from "./utils"
 
 interface SmartImeConfiguration {
   smartImeEnable: boolean
+  smartImeAssociationExt: string
   warnDisabled: boolean
   disabledOnEnglishTextOverN: number
   enterScopesFurtherMatch: string
@@ -16,6 +17,7 @@ interface SmartImeConfiguration {
 export const getSmartIMEConfiguration = () => {
   return getConfiguration<SmartImeConfiguration>([
     "smartImeEnable",
+    "smartImeAssociationExt",
     "warnDisabled",
     "disabledOnEnglishTextOverN",
     "enterScopesFurtherMatch",

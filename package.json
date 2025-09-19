@@ -3,7 +3,7 @@
   "displayName": "jumpy-and-ime",
   "description": "把jumpy的功能和控制系统ime中英文变化的能力聚合到一个插件上",
   "version": "0.0.1",
-  "publisher": "bang",
+  "publisher": "tiebang",
   "engines": {
     "vscode": "^1.104.0"
   },
@@ -87,44 +87,56 @@
           "default": 676,
           "description": "最多26*26=676个待选快捷代码，满额断词数量可能有性能问题，可自定义设置最大数量"
         },
-        "jumpy-and-ime.darkThemeBackground": {
+        "jumpy-and-ime.fontFamily": {
           "order": 4,
+          "type": "string",
+          "default": "",
+          "description": "跳转快捷代码字体类型"
+        },
+        "jumpy-and-ime.fontSize": {
+          "order": 5,
+          "type": "number",
+          "default": 0,
+          "description": "跳转快捷代码字体大小"
+        },
+        "jumpy-and-ime.darkThemeBackground": {
+          "order": 6,
           "type": "string",
           "default": "white",
           "description": "暗黑模式下显示的快捷代码块背景颜色"
         },
         "jumpy-and-ime.darkThemeForeground": {
-          "order": 5,
+          "order": 7,
           "type": "string",
           "default": "black",
           "description": "暗黑模式下显示的快捷代码块字体颜色"
         },
         "jumpy-and-ime.lightThemeBackground": {
-          "order": 6,
+          "order": 8,
           "type": "string",
           "default": "black",
           "description": "明亮模式下显示的快捷代码块背景颜色"
         },
         "jumpy-and-ime.lightThemeForeground": {
-          "order": 7,
+          "order": 9,
           "type": "string",
           "default": "white",
           "description": "明亮模式下显示的快捷代码块字体颜色"
         },
         "jumpy-and-ime.movingStepLength": {
-          "order": 8,
+          "order": 10,
           "type": "number",
           "default": 5,
           "description": "设置viewport跳动步长"
         },
         "jumpy-and-ime.cursorStyle.enable": {
-          "order": 9,
+          "order": 11,
           "type": "boolean",
           "default": true,
           "description": "光标【样式】随中英文变化"
         },
         "jumpy-and-ime.cursorStyle.English": {
-          "order": 10,
+          "order": 12,
           "type": "string",
           "default": "Line",
           "enum": [
@@ -138,7 +150,7 @@
           "description": "英文输入状态下的光标样式"
         },
         "jumpy-and-ime.cursorStyle.Chinese": {
-          "order": 11,
+          "order": 13,
           "type": "string",
           "default": "Underline",
           "enum": [
@@ -152,61 +164,67 @@
           "description": "中文输入状态下的光标样式"
         },
         "jumpy-and-ime.cursorColor.enable": {
-          "order": 12,
+          "order": 14,
           "type": "boolean",
           "default": true,
           "description": "光标【颜色】随中英文变化"
         },
         "jumpy-and-ime.cursorColor.English": {
-          "order": 13,
+          "order": 15,
           "type": "string",
           "default": "",
           "description": "英文输入状态下的光标十六进制颜色(格式：#RGB、#RGBA、#RRGGBB 或 #RRGGBBAA)"
         },
         "jumpy-and-ime.cursorColor.Chinese": {
-          "order": 14,
+          "order": 16,
           "type": "string",
           "default": "#FF0000",
           "description": "中文输入状态下的光标十六进制颜色(格式：#RGB、#RGBA、#RRGGBB 或 #RRGGBBAA)"
         },
+        "jumpy-and-ime.smartImeAssociationExt": {
+          "order": 17,
+          "type": "string",
+          "default": "js,jsx,ts,tsx,mjs,cjs,vue",
+          "description": "配置smart-ime功能在设定的文件后缀上启用，用逗号分割"
+        },
         "jumpy-and-ime.warnDisabled": {
-          "order": 15,
+          "order": 18,
           "type": "boolean",
           "default": true,
           "description": "是否提示smart-ime功能被禁用"
         },
         "jumpy-and-ime.disabledOnEnglishTextOverN": {
-          "order": 16,
+          "order": 19,
           "type": "number",
           "default": 100,
           "description": "如果当前文档拥有超过 n 个英文字符且没有中文字符，则禁用smart-ime功能（你也可以直接在文档中加入 DISABLE_SMART_IME 字符串来禁用插件）"
         },
         "jumpy-and-ime.enterScopesFurtherMatch": {
-          "order": 17,
+          "order": 20,
           "type": "string",
           "default": "comment,string",
           "description": "设置scopes，用逗号分割，前缀匹配。进入设置的scopes，会进一步进行以下的3项功能匹配"
         },
         "jumpy-and-ime.enableMatchCnCursorToCn": {
-          "order": 18,
+          "order": 21,
           "type": "boolean",
           "default": true,
           "description": "光标前检测到1个字符是中文，则切换为【中文模式】"
         },
         "jumpy-and-ime.enableMatchCnSpaceCursorToEn": {
-          "order": 19,
+          "order": 22,
           "type": "boolean",
           "default": true,
           "description": "光标前检测到中文+空格时，则切换为【英文模式】"
         },
         "jumpy-and-ime.enableMatchEnDoubleSpaceCursorToCn": {
-          "order": 20,
+          "order": 23,
           "type": "boolean",
           "default": true,
           "description": "检测到当前行前有中文，且光标前检测到非中文+双空格时，则切换为【中文模式】，并删掉一个空格"
         },
         "jumpy-and-ime.enterScopesToCnMatch": {
-          "order": 21,
+          "order": 24,
           "type": "string",
           "default": "comment",
           "description": "设置scopes，用逗号分割，前缀匹配。进入设置的scopes，则切换为【中文模式】"

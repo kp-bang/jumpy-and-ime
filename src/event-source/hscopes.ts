@@ -1,10 +1,11 @@
-import { filter, map, Subject } from "rxjs"
+import { filter, scan, Subject } from "rxjs"
 import vscode from "vscode"
 
 import configuration from "../configuration"
 import globalStore from "../store/global"
 import getScopeAt from "../utils/hscopes/get-scope-at"
 import splitScopes from "../utils/hscopes/splite-scopes"
+import isIncludeAssociationExt from "../utils/is-include-association-ext"
 
 // 光标移动、变化，可以计算当前scopes
 export const hscopesCursorMove$ = new Subject<void>()
@@ -17,23 +18,37 @@ export const hscopesPreChCharSpace$ = new Subject<void>()
 // 前两个自发是英文+2空格，当前不是拼音输入法，则转成拼音输入法
 export const hscopesPreEnCharSpaceSpace$ = new Subject<void>()
 
+interface Scopes {
+  curScopes: string[]
+  deletedScopes: string[]
+  addedScopes: string[]
+}
+
 // 最新的scopes，依次是enterScopes，leaveScopes和当前scopes
 export const hscopesUpdateScopes$ = hscopesCursorMove$.pipe(
-  filter(
-    () =>
-      configuration.smartIme.smartImeEnable && !globalStore.jumpy.isJumpyMode && !globalStore.smartIme.smartImeDisabled
-  ),
-  map<void, undefined | [string[], string[], string[]]>(() => {
+  scan((acc) => {
     const editor = vscode.window.activeTextEditor
-    if (!editor) return
+    if (!editor) return acc
 
     const document = editor?.document
     const position = editor?.selections[0]?.active
 
     const token = getScopeAt(document, position)
-    if (!token) return
-    const [deletedScopes, addedScopes] = splitScopes(token.scopes)
+    if (!token) return acc
 
-    return [addedScopes, deletedScopes, token.scopes]
-  })
+    const { curScopes: oldScopes } = acc
+
+    const curScopes = splitScopes(oldScopes, token.scopes)
+    return {
+      ...curScopes,
+      curScopes: token.scopes
+    }
+  }, {} as Scopes),
+  filter(
+    () =>
+      isIncludeAssociationExt() &&
+      configuration.smartIme.smartImeEnable &&
+      !globalStore.jumpy.isJumpyMode &&
+      !globalStore.smartIme.smartImeDisabled
+  )
 )
