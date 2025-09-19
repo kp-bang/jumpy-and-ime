@@ -33,6 +33,8 @@ A: 我是前端，默认支持`js,jsx,ts,tsx,mjs,cjs,vue`的文件后缀。你�
 **Q: 4.光标的样式和颜色和输入法的模式不一定匹配**  
 A: node无法取得输入法模式变化事件。一般情况下，插件根据当前光标scope主动去设置输入法模式后是匹配的，除非用户按了`shift`修改输入法模式导致不对齐。
 
-<!-- ## 问题反馈 -->
+## 问题反馈
 
-<!-- [Create an issue](https://github.com/wmaurer/vscode-jumpy/issues) -->
+[Create an issue](https://github.com/kp-bang/jumpy-and-ime/issues)
+
+[为什么要做这个项目？](https://github.com/kp-bang/jumpy-and-ime/blob/main/WHY.md)
