@@ -3,6 +3,7 @@
   "displayName": "jumpy-and-ime",
   "description": "把jumpy的功能和控制系统ime中英文变化的能力聚合到一个插件上",
   "version": "0.0.1",
+  "icon": "./assets/jumpy-and-ime.png",
   "publisher": "kp-bang",
   "engines": {
     "vscode": "^1.104.0"
